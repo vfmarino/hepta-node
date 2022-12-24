@@ -1,0 +1,51 @@
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:abc123@127.0.0.1:3306/db_hepta"
+}
+
+model User {
+  id_user    Int     @id @default(autoincrement())
+  username String @unique
+  password String
+  nome String
+  cpf String
+  telefone String?
+  especialidade String?
+
+  contaBancaria ContaBancaria? @relation(fields: [conta_bancariaid], references: [id_contas_bancarias])
+  conta_bancariaid Int?
+
+  hospital Hospital? @relation(fields: [hospitaisid], references: [id_hospitais])
+  hospitaisid Int?
+
+  @@map("users")
+}
+
+model ContaBancaria {
+  id_contas_bancarias Int @id @default(autoincrement())
+  agencia String
+  banco String
+  conta String
+  cpf String
+  tipo String
+  user User[]
+
+  @@map("contas_bancarias")
+}
+
+model Hospital {
+  id_hospitais Int @id @default(autoincrement())
+  cep String
+  cidade String
+  cnpj String
+  estado String
+  hospital String
+
+  users User[]
+
+  @@map("hospitais")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
