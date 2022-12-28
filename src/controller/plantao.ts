@@ -13,11 +13,17 @@ export default class PlantaoController {
   }
 
   public static async findAll(ctx: Context): Promise<void> {
-    ctx.body = "findAll";
+    ctx.body = await prisma.plantao.findMany();
   }
 
   public static async findOne(ctx: Context): Promise<void> {
-    ctx.body = "findOne";
+    const id: number = +ctx.params.id;
+
+    ctx.body = await prisma.plantao.findUnique({
+      where: {
+        id_plantao_medico: id
+      }
+    });
   }
 
   public static async delete(ctx: Context): Promise<void> {
