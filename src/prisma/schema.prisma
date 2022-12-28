@@ -18,6 +18,9 @@ model User {
   hospital Hospital? @relation(fields: [hospitaisid], references: [id_hospitais])
   hospitaisid Int?
 
+  plantoes Plantao[]
+
+
   @@map("users")
 }
 
@@ -44,6 +47,20 @@ model Hospital {
   users User[]
 
   @@map("hospitais")
+}
+
+model Plantao {
+  id_plantao_medico Int @id @default(autoincrement())
+  data DateTime?
+  dia_da_semana DateTime?
+  plantao_statusid Int
+
+  user User? @relation(fields: [userid], references: [id_user])
+  userid Int?
+
+  valor_dos_plantoesid Int
+
+  @@map("dados_de_plantoes")
 }
 
 generator client {

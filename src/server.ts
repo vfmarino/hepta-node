@@ -37,11 +37,11 @@ app.use(bodyParser());
 app.use(unprotectedRouter.routes());
 app.use(unprotectedRouter.allowedMethods());
 
-// JWT middleware -> below this line routes are only reached if JWT token is valid, secret as env variable
-app.use(jwt({ secret: config.jwtSecret }));
-
 app.use(protectedRouter.routes());
 app.use(protectedRouter.allowedMethods());
+
+// JWT middleware -> below this line routes are only reached if JWT token is valid, secret as env variable
+app.use(jwt({ secret: config.jwtSecret }));
 
 
 app.listen(config.port, () => {
