@@ -16,7 +16,7 @@ const config: Config = {
     port: +(process.env.PORT || 3000),
     debugLogging: isDevMode,
     dbsslconn: !isDevMode,
-    jwtSecret: process.env.JWT_SECRET || "your-secret-whatever",
+    jwtSecret: process.env.JWT_SECRET || "our-secret-whatever",
     databaseUrl: process.env.DATABASE_URL || "mysql://root:abc123@localhost:3306/db_hepta",
 };
 

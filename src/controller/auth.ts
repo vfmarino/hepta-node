@@ -29,8 +29,6 @@ export default class AuthController {
       ctx.body = {
         token: jsonwebtoken.sign({
           data: user,
-          //exp in seconds
-          exp: Math.floor(Date.now() / 1000) - (60 * 60) // 30 days
         }, config.jwtSecret)
       };
 
