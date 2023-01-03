@@ -26,7 +26,6 @@ export default class PlantaoController {
     ctx.body = await prisma.plantao.findMany({
       where,
       include: {
-        valor: true,
         status: true,
         user: true,
 
@@ -45,14 +44,23 @@ export default class PlantaoController {
 
     const plantoes = await prisma.plantao.groupBy({
       by: ["userID"],
-      where,
+      _count: {
+        _all: true,
+      },
+      _sum: {
+        valor: true,
+      },
     });
 
-    ctx.body = {
-      plantoes,
-      valor: 100,
-      qt: plantoes.length
-    };
+    const _plantoes = plantoes.map(plantao => {
+      return {
+        userId: plantao.userID,
+        valor: plantao._sum.valor,
+        qt: plantao._count._all
+      };
+    });
+
+    ctx.body = _plantoes;
   }
 
   public static async findOne(ctx: Context): Promise<void> {
@@ -60,7 +68,7 @@ export default class PlantaoController {
 
     ctx.body = await prisma.plantao.findUnique({
       where: {
-        id: id
+        id: id,
       }
     });
   }

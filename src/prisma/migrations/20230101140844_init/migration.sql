@@ -32,7 +32,6 @@ CREATE TABLE `Hospitais` (
     `estado` VARCHAR(191) NOT NULL,
     `cep` VARCHAR(191) NOT NULL,
     `cnpj` VARCHAR(191) NOT NULL,
-    `setorID` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -41,9 +40,13 @@ CREATE TABLE `Hospitais` (
 CREATE TABLE `Setores` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `setores` VARCHAR(191) NOT NULL,
+    `hospitalID` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Setores` ADD CONSTRAINT `Setores_hospitalID_fkey` FOREIGN KEY (`hospitalID`) REFERENCES `Hospitais`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- CreateTable
 CREATE TABLE `MotivosDeTroca` (
@@ -94,6 +97,3 @@ ALTER TABLE `plantoes` ADD CONSTRAINT `plantoes_statusID_fkey` FOREIGN KEY (`sta
 
 -- AddForeignKey
 ALTER TABLE `plantoes` ADD CONSTRAINT `plantoes_valorID_fkey` FOREIGN KEY (`valorID`) REFERENCES `Valor`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Hospitais` ADD CONSTRAINT `Hospitais_setorID_fkey` FOREIGN KEY (`setorID`) REFERENCES `Setores`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

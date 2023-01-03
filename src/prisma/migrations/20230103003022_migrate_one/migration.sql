@@ -5,10 +5,10 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `setores` DROP FOREIGN KEY `Setores_hospitalID_fkey`;
+ALTER TABLE `Setores` DROP FOREIGN KEY `Setores_hospitalID_fkey`;
 
 -- DropTable
-DROP TABLE `hospitais`;
+DROP TABLE `Hospitais`;
 
 -- CreateTable
 CREATE TABLE `Hospital` (

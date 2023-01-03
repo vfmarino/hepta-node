@@ -55,8 +55,7 @@ model Plantao {
   status Status?    @relation(fields: [statusID], references: [id])
   statusID          Int?
 
-  valor Valor?      @relation(fields: [valorID], references: [id])
-  valorID           Int?
+  valor Int?
   
   @@map("plantoes")
 }
@@ -130,10 +129,8 @@ model Status{
 model Valor{
 
   id        Int @id @default(autoincrement())
-  valor     String
+  valor     Int
 
-  plantao   Plantao[]
-  
   @@map("Valor")
 }
 
