@@ -21,8 +21,10 @@ protectedRouter.get("/setores", setor.findAll);
 
 //PlantaoRoutes
 protectedRouter.post("/plantao", plantao.create);
+protectedRouter.get("/plantao/relatorio", plantao.relatorioFinanceiro);
 protectedRouter.get("/plantao", plantao.findAll);
 protectedRouter.get("/plantao/:id", plantao.findOne);
 protectedRouter.delete("/plantao/:id", plantao.delete);
+
 
 export { protectedRouter };

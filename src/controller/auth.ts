@@ -15,6 +15,9 @@ export default class AuthController {
       const { password: userPassword, ...user } = await prisma.user.findUnique({
         where: {
           username: username
+        },
+        include: {
+          role: true
         }
       });
 
@@ -29,7 +32,8 @@ export default class AuthController {
       ctx.body = {
         token: jsonwebtoken.sign({
           data: user,
-        }, config.jwtSecret)
+        }, config.jwtSecret),
+        user // quando for user:user pode ser somente user
       };
 
     } catch(err) {
