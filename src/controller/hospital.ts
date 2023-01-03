@@ -21,7 +21,7 @@ export default class HospitalController {
     const id: number = +ctx.params.id;
     ctx.body = await prisma.hospital.findUnique({
       where: {
-        id_hospitais: +id
+        id: +id
       }
     });
   }
@@ -30,7 +30,7 @@ export default class HospitalController {
     const id: number = +ctx.params.id;
     ctx.body = await prisma.hospital.delete({
       where: {
-        id_hospitais: +id
+        id: +id
       }
     });
   }

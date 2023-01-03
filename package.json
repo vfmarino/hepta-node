@@ -10,10 +10,12 @@
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
     "serve": "node dist/server.js",
     "build": "npm run lint && npm run build-ts && npm run copy-static-assets",
-    "start": "npm run serve"
+    "start": "npm run serve",
+    "generate": "npx prisma generate --schema=./src/prisma/schema.prisma",
+    "migrate": "npx prisma migrate dev --schema=./src/prisma/schema.prisma"
   },
   "engines": {
-    "node": "14.x.x",
+    "node": "16.x.x",
     "npm": "6.x.x"
   },
   "author": "Javier Aviles",

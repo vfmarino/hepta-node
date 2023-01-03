@@ -21,7 +21,7 @@ export default class PlantaoController {
 
     ctx.body = await prisma.plantao.findUnique({
       where: {
-        id_plantao_medico: id
+        id: id
       }
     });
   }

@@ -23,36 +23,34 @@ export default class UserController {
 
   public static async createMedico(ctx: Context): Promise<void> {
     const {
-      nome,
+      name,
       username,
       password: _password,
       cpf,
       especialidade,
       telefone,
       contaBancaria,
-      hospitaisid,
+     
     } =  ctx.request.body;
 
     const password = await bcrypt.hash(_password, 10);
 
     const user = await prisma.user.create({
       data: {
-        nome,
+        name,
         username,
         password,
         cpf,
         especialidade,
         telefone,
-        hospital: {
-          connect: { id_hospitais: hospitaisid}
-        },
+        
         contaBancaria: {
           create: { ...contaBancaria, cpf }
         }
       },
       include: {
         contaBancaria: true,
-        hospital: true
+       
       }
     });
 
@@ -64,15 +62,15 @@ export default class UserController {
     const query = ctx.request.query;
 
     if (query.id_user) {
-      where.id_user = +query.id_user;
+      where.id = +query.id_user;
     }
 
     if (query.telefone) {
       where.telefone = query.telefone as string;
     }
 
-    if (query.nome) {
-      where.nome = query.nome as string;
+    if (query.name) {
+      where.name = query.nome as string;
     }
 
     if (query.cpf) {
@@ -96,7 +94,7 @@ export default class UserController {
     const id: number = +ctx.params.id;
     ctx.body = await prisma.user.findUnique({
       where: {
-        id_user: +id
+        id: +id
       }
     });
   }
@@ -105,7 +103,7 @@ export default class UserController {
     const id: number = +ctx.params.id;
     ctx.body = await prisma.user.delete({
       where: {
-        id_user: +id
+        id: +id
       }
     });
   }

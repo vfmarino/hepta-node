@@ -1,66 +1,140 @@
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:abc123@127.0.0.1:3306/db_hepta"
+  url      = "mysql://root:abc123@127.0.0.1:3306/heptadb"
 }
 
 model User {
-  id_user    Int     @id @default(autoincrement())
-  username String @unique
-  password String
-  nome String
-  cpf String
-  telefone String?
-  especialidade String?
+  id                Int @id @default(autoincrement())
+  username          String @unique
+  password          String
+  name              String
+  cpf               String @unique
+  telefone          String @unique
+  especialidade     String 
 
-  contaBancaria ContaBancaria? @relation(fields: [conta_bancariaid], references: [id_contas_bancarias])
-  conta_bancariaid Int?
+  contaBancaria     ContaBancaria? @relation(fields: [contaBancariaID], references: [id])
+  contaBancariaID   Int?
 
-  hospital Hospital? @relation(fields: [hospitaisid], references: [id_hospitais])
-  hospitaisid Int?
+  role Role?        @relation(fields: [roleID], references: [id])
+  roleID            Int?
 
-  plantoes Plantao[]
-
+  plantao           Plantao[]
 
   @@map("users")
 }
 
 model ContaBancaria {
-  id_contas_bancarias Int @id @default(autoincrement())
-  agencia String
-  banco String
-  conta String
-  cpf String
-  tipo String
-  user User[]
 
-  @@map("contas_bancarias")
-}
+  id        Int @id @default(autoincrement())
+  agencia   String
+  banco     String
+  conta     String
+  cpf       String
+  tipo      String
 
-model Hospital {
-  id_hospitais Int @id @default(autoincrement())
-  cep String
-  cidade String
-  cnpj String
-  estado String
-  hospital String
+  user      User[]
 
-  users User[]
-
-  @@map("hospitais")
+  @@map("contaBancaria")
 }
 
 model Plantao {
-  id_plantao_medico Int @id @default(autoincrement())
-  data DateTime?
-  dia_da_semana DateTime?
-  plantao_statusid Int
 
-  user User? @relation(fields: [userid], references: [id_user])
-  userid Int?
+  id                Int @id @default(autoincrement())
+  data              DateTime?
+  diaDaSemana       String
 
-  valor_dos_plantoesid Int
+  user User?        @relation(fields: [userID], references: [id])
+  userID            Int?
 
-  @@map("dados_de_plantoes")
+  setor Setores?    @relation(fields: [setorID], references: [id])
+  setorID           Int?
+
+  periodo Periodo?  @relation(fields: [peridoID], references: [id])
+  peridoID          Int?
+
+  status Status?    @relation(fields: [statusID], references: [id])
+  statusID          Int?
+
+  valor Valor?      @relation(fields: [valorID], references: [id])
+  valorID           Int?
+  
+  @@map("plantoes")
+}
+
+model Role{
+
+  id     Int @id @default(autoincrement())
+  role   String
+
+  user   User[]
+  
+  @@map("Role")
+}
+
+model Hospital{
+  id        Int @id @default(autoincrement())
+  hospital  String
+  cidade    String
+  estado    String
+  cep       String
+  cnpj      String
+
+  setor     Setores[]
+
+}
+
+model Setores{
+
+  id          Int @id @default(autoincrement())
+  setores     String
+
+  hospital    Hospital?   @relation(fields: [hospitalID], references: [id])
+  hospitalID  Int?
+  
+  plantao     Plantao[]
+  
+  @@map("Setores")
+}
+
+model MotivoDeTroca{
+
+  id                  Int @id @default(autoincrement())
+  plantaoID           Int
+  userID              Int
+  dataDaSolicitacao   DateTime
+  motivo              String
+
+  @@map("MotivosDeTroca")
+}
+
+model Periodo{
+
+  id        Int @id @default(autoincrement())
+  periodo   String
+
+  plantao   Plantao[]
+  
+  @@map("Periodo")
+}
+
+model Status{
+
+  id        Int @id @default(autoincrement())
+  status    String
+
+  plantao   Plantao[]
+  
+  @@map("Status")
+}
+
+model Valor{
+
+  id        Int @id @default(autoincrement())
+  valor     String
+
+  plantao   Plantao[]
+  
+  @@map("Valor")
 }
 
 generator client {

@@ -1,5 +1,5 @@
 import Router from "@koa/router";
-import { hospital, plantao, user } from "./controller";
+import { hospital,  setor,  user, plantao } from "./controller";
 
 const protectedRouter = new Router();
 
@@ -16,7 +16,10 @@ protectedRouter.get("/hospital", hospital.findAll);
 protectedRouter.get("/hospital/:id", hospital.findOne);
 protectedRouter.delete("/hospital/:id", hospital.delete);
 
-// PlantaoRoutes
+// SetoresRoutes
+protectedRouter.get("/setores", setor.findAll);
+
+//PlantaoRoutes
 protectedRouter.post("/plantao", plantao.create);
 protectedRouter.get("/plantao", plantao.findAll);
 protectedRouter.get("/plantao/:id", plantao.findOne);
