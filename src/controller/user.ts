@@ -86,7 +86,10 @@ export default class UserController {
     }
 
     ctx.body = await prisma.user.findMany({
-      where
+      where,
+      include:{
+        role:true
+      }
     });
   }
 

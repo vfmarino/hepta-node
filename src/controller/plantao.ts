@@ -15,21 +15,16 @@ export default class PlantaoController {
   public static async findAll(ctx: Context): Promise<void> {
     const query = ctx.request.query;
     const where: Prisma.PlantaoWhereInput = {};
-
-    if (query.userID) {
-      where.userID = +query.userID;
-    }
-    if (query.status) {
-      where.statusID = +query.status;
-    }
-
+  
+  
     ctx.body = await prisma.plantao.findMany({
       where,
       include: {
+        periodo: true,
         status: true,
         user: true,
-
-
+        setor:true
+  
       }
     });
   }
