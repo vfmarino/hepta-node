@@ -22,7 +22,6 @@ export default class PlantaoController {
         status: true,
         user: true,
         setor: true
-
       }
     });
   }
@@ -42,8 +41,6 @@ export default class PlantaoController {
         status: true,
         user: true,
         setor: true,
-
-
       }
     });
   }
@@ -61,8 +58,6 @@ export default class PlantaoController {
         status: true,
         user: true,
         setor: true,
-
-
       }
     });
   }
@@ -101,16 +96,24 @@ export default class PlantaoController {
   public static async relatorioFinanceiro(ctx: Context): Promise<void> {
     const query = ctx.request.query;
     const where: Prisma.PlantaoWhereInput = {};
+    const startDate: string = "" + query.startDate;
+    const endDate: string = "" + query.endDate;
+
+    if (!query.startDate || !query.endDate) {
+      ctx.body = "informe a data do relatório";
+      return;
+    }
 
     if (query.status) {
       where.statusID = +query.status;
     }
-   /* if (query.startDate && query.endDate) {
-      where.data = {
-        between: [query.startDate, query.endDate],
-      };
-    }*/
 
+    if (query.status) {
+      where.data = {
+        lte: new Date(endDate),
+        gte: new Date(startDate),
+      };
+    }
 
     const plantoes = await prisma.plantao.groupBy({
       by: ["userID"],
@@ -120,6 +123,7 @@ export default class PlantaoController {
       _sum: {
         valor: true,
       },
+      where
     });
 
     const _plantoes = plantoes.map(plantao => {
