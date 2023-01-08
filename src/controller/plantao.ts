@@ -46,7 +46,7 @@ export default class PlantaoController {
   }
 
   public static async findAllByStatus(ctx: Context): Promise<void> {
- 
+
     const where: Prisma.PlantaoWhereInput = {
       statusID: 2
     };
@@ -67,7 +67,7 @@ export default class PlantaoController {
     const userId = ctx.params.id;
     const statusId = 2;
     const updates = ctx.request.body;
-  
+
     ctx.body = await prisma.plantao.update({
       where: { id: +plantaoId },
       data: {
@@ -82,7 +82,7 @@ export default class PlantaoController {
     const userId = ctx.params.id;
     const statusId = 3;
     const updates = ctx.request.body;
-  
+
     ctx.body = await prisma.plantao.update({
       where: { id: +plantaoId },
       data: {
@@ -104,16 +104,14 @@ export default class PlantaoController {
       return;
     }
 
-    if (query.status) {
-      where.statusID = +query.status;
-    }
+    where.statusID = 4;
 
-    if (query.status) {
-      where.data = {
-        lte: new Date(endDate),
-        gte: new Date(startDate),
-      };
-    }
+    where.data = {
+      lte: new Date(endDate),
+      gte: new Date(startDate),
+    };
+    console.log(startDate);
+    console.log(endDate);
 
     const plantoes = await prisma.plantao.groupBy({
       by: ["userID"],
@@ -123,12 +121,21 @@ export default class PlantaoController {
       _sum: {
         valor: true,
       },
+      select: {
+        user: {
+          select: {
+            nome: true,
+            cpf: true,
+          },
+        },
+      },
       where
     });
 
     const _plantoes = plantoes.map(plantao => {
       return {
         userId: plantao.userID,
+        
         valor: plantao._sum.valor,
         qt: plantao._count._all
       };
