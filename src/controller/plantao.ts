@@ -1,6 +1,7 @@
 import { Context } from "koa";
 import { Prisma, PrismaClient } from "@prisma/client";
 
+
 const prisma = new PrismaClient();
 
 export default class PlantaoController {
@@ -121,25 +122,25 @@ export default class PlantaoController {
       _sum: {
         valor: true,
       },
-      select: {
-        user: {
-          select: {
-            nome: true,
-            cpf: true,
-          },
-        },
+      where,
+    });
+    
+    const _plantoes = await Promise.all(plantoes.map(async plantao => {
+    const user = await prisma.user.findOne({
+      where: {
+        id: plantao.userID,
       },
-      where
     });
-
-    const _plantoes = plantoes.map(plantao => {
-      return {
-        userId: plantao.userID,
-        
-        valor: plantao._sum.valor,
-        qt: plantao._count._all
-      };
-    });
+    return {
+      userId: plantao.userID,
+      valor: plantao._sum.valor,
+      qt: plantao._count._all,
+      user: {
+        name: user.name,
+       
+      },
+    };
+  }));
 
     ctx.body = _plantoes;
   }
