@@ -111,8 +111,6 @@ export default class PlantaoController {
       lte: new Date(endDate),
       gte: new Date(startDate),
     };
-    console.log(startDate);
-    console.log(endDate);
 
     const plantoes = await prisma.plantao.groupBy({
       by: ["userID"],
@@ -124,23 +122,25 @@ export default class PlantaoController {
       },
       where,
     });
-    
+
     const _plantoes = await Promise.all(plantoes.map(async plantao => {
-    const user = await prisma.user.findOne({
-      where: {
-        id: plantao.userID,
-      },
-    });
-    return {
-      userId: plantao.userID,
-      valor: plantao._sum.valor,
-      qt: plantao._count._all,
-      user: {
-        name: user.name,
-       
-      },
-    };
-  }));
+      const user = await prisma.user.findUnique({
+        where: {
+          id: plantao.userID,
+        },
+        include: {
+          contaBancaria: true
+        }
+      });
+
+      delete user.password;
+
+      return {
+        valor: plantao._sum.valor,
+        qt: plantao._count._all,
+        user,
+      };
+    }));
 
     ctx.body = _plantoes;
   }
