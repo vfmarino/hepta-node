@@ -8,6 +8,7 @@ export interface Config {
     dbsslconn: boolean;
     jwtSecret: string;
     databaseUrl: string;
+    cronJobExpression: string;
 }
 
 const isDevMode = process.env.NODE_ENV == "development";
@@ -18,6 +19,8 @@ const config: Config = {
     dbsslconn: !isDevMode,
     jwtSecret: process.env.JWT_SECRET || "our-secret-whatever",
     databaseUrl: process.env.DATABASE_URL || "mysql://root:abc123@localhost:3306/heptadb",
+    
+    cronJobExpression: "* * * * * *",
 };
 
 export { config };

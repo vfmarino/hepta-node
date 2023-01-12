@@ -10,6 +10,8 @@ import { logger } from "./logger";
 import { config } from "./config";
 import { unprotectedRouter } from "./unprotectedRoutes";
 import { protectedRouter } from "./protectedRoutes";
+import { cron } from "./cron";
+
 
 const app = new Koa();
 
@@ -42,6 +44,9 @@ app.use(jwt({ secret: config.jwtSecret }));
 
 app.use(protectedRouter.routes());
 app.use(protectedRouter.allowedMethods());
+
+// Register cron job to do any action needed
+cron.start();
 
 app.listen(config.port, () => {
   console.log(`Server running on port ${config.port}`);
